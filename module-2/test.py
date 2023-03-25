@@ -1,17 +1,51 @@
-message = input("Введите сообщение: ")
-offset = int(input("Введите сдвиг: "))
-encoded_message = ""
-for ch in message:
-    if ch != " ":
-        pos = ord(ch) - ord("a")
-        pos = (pos + offset) % 26
-        new_char = chr(pos + ord("a"))
-        encoded_message += new_char
-    elif ch == " ":
-        encoded_message += " "
+result = None
+operand = None
+operator = None
+wait_for_number = True
 
-print(encoded_message)
+while True:
+    if wait_for_number:
+        operand = input("Enter operand: ")
+        try:
+            operand = int(operand)
+        except ValueError:
+            print(f"operand {operand} is not a number, try again")
+            continue
+        else:
+            if not operator:
+                result = operand
 
-# 'Hello my little friends!' -> 'Spwwz xj wteewp qctpyod!' offset=37
+            elif "+" in operator:
+                result += operand
 
-# "Hello world!", offset = 7
+            elif "-" in operator:
+                result -= operand
+
+            elif "*" in operator:
+                result *= operand
+
+            elif "/" in operator:
+                result /= operand
+
+            wait_for_number = False
+
+    elif not wait_for_number:
+        operator = input("Enter operator: ")
+
+        if operator == "+" or operator == "-" or operator == "*" or operator == "/":
+            print("it is ok!")
+            print("operator:", operator)
+            wait_for_number = True
+        elif operator == "=":
+            result = float(result)
+            break
+        else:
+            print(f"{operator} is not: '+' or '-' or '/' or '*', try again")
+            continue
+
+print("result:", result)
+
+
+# Первая: ["10", "+", "5", "6", "/", "3", "-", "a", "2", "*", "6", "="], результат 18.0
+
+# Вторая: ["2", "3", "-", "1", "+", "10", "*", "2", "="], результат 22.0
