@@ -3,108 +3,127 @@ from random import randint, choice
 SIZE_W = randint(5, 12)
 SIZE_H = randint(5, 12)
 
+ENEMIES_NUMBER = 5
 
-def check_state(char_hero, char_x, char_y, exit_x, exit_y, enemy_x, enemy_y):
-    win = char_x == exit_x and char_y == exit_y
-    fail_condition = char_x == enemy_x and char_y == enemy_y
+
+def check_state(objects):
+    for obj in objects:
+        if obj["type"] == "hero":
+            hero = obj
+
+        elif obj["type"] == "portal":
+            portal = obj
+
+        elif obj["type"] == "enemy":
+            fail_condition = hero["x"] == obj["x"] and hero["y"] == obj["y"]
+
+            if fail_condition:
+                hero["sign"] = "F"
+                print(f"You failed in {step_count} steps")
+                break
+
+    win = hero["x"] == portal["x"] and hero["y"] == portal["y"]
 
     if win:
-        char_hero = "W"
+        hero["sign"] = "W"
         print(f"Game over! You won in {step_count} step!")
-    elif fail_condition:
-        char_hero = "F"
-        print(f"You failed in {step_count} steps")
 
-    return char_hero, win or fail_condition
+    return win or fail_condition
+
+
+def generate_enemies(number):
+    enemies = []
+
+    for _ in range(number):
+        enemy = {
+            "x": randint(0, SIZE_W - 1),
+            "y": randint(0, SIZE_H - 1),
+            "sign": "E",
+            "type": "enemy",
+        }
+
+        enemies.append(enemy)
+
+    return enemies
 
 
 def draw_map(
-    char_x,
-    char_y,
-    char_hero,
-    exit_x,
-    exit_y,
-    exit_sign,
-    enemy_x,
-    enemy_y,
-    char_enemy,
+    objects,
     size_w=SIZE_W,
     size_h=SIZE_H,
 ):
-    world_map = ""
+    world_map = []
 
     for j in range(size_h):
-        row = " | "
+        row = []
 
         for i in range(size_w):
-            if char_x == i and char_y == j:
-                row += f"{char_hero}| "
-            elif enemy_x == i and enemy_y == j:
-                row += f"{char_enemy}| "
-            elif exit_x == i and exit_y == j:
-                row += f"{exit_sign}| "
-            else:
-                row += " | "
+            row.append(" ")
 
-        world_map += f"{row}\n"
+        world_map.append(row)
+
+    # for obj in objects:
+    #     world_map[obj["y"]][obj["x"]] = obj["sign"]
 
     return world_map
 
 
-def move(direction, x, y, size_w=SIZE_W, size_h=SIZE_H):
-    if direction == "u" and y > 0:
-        y -= 1
-    elif direction == "d" and y < size_h - 1:
-        y += 1
-    elif direction == "l" and x > 0:
-        x -= 1
-    elif direction == "r" and x < size_w - 1:
-        x += 1
-
-    return x, y
+def move(direction, obj, size_w=SIZE_W, size_h=SIZE_H):
+    if direction == "u" and obj["y"] > 0:
+        obj["y"] -= 1
+    elif direction == "d" and obj["y"] < size_h - 1:
+        obj["y"] += 1
+    elif direction == "l" and obj["x"] > 0:
+        obj["x"] -= 1
+    elif direction == "r" and obj["x"] < size_w - 1:
+        obj["x"] += 1
 
 
-char_x = randint(0, SIZE_W - 1)
-char_y = randint(0, SIZE_H - 1)
-char_hero = "H"
+def print_map(world_map):
+    for row in world_map:
+        print(f'|{"|".join(row)}|')
 
-enemy_x = randint(0, SIZE_W - 1)
-enemy_y = randint(0, SIZE_H - 1)
-char_enemy = "E"
 
-exit_x = randint(0, SIZE_W - 1)
-exit_y = randint(0, SIZE_H - 1)
-exit_sign = "S"
+hero = {
+    "x": randint(0, SIZE_W - 1),
+    "y": randint(0, SIZE_H - 1),
+    "sign": "H",
+    "type": "hero",
+}
+
+
+portal = {
+    "x": randint(0, SIZE_W - 1),
+    "y": randint(0, SIZE_H - 1),
+    "sign": "S",
+    "type": "portal",
+}
+
+enemies = generate_enemies(ENEMIES_NUMBER)
+
+
+objects = [hero, portal] + enemies
 
 
 step_count = 0
 
 while True:
-    char_hero, game_over = check_state(
-        char_hero, char_x, char_y, exit_x, exit_y, enemy_x, enemy_y
-    )
-
-    print(
-        draw_map(
-            char_x,
-            char_y,
-            char_hero,
-            exit_x,
-            exit_y,
-            exit_sign,
-            enemy_x,
-            enemy_y,
-            char_enemy,
-        )
-    )
+    game_over = check_state(objects)
+    world_map = draw_map(object)
+    print(world_map)
 
     if game_over:
         break
 
-    direction = input("Enter direction (u / d / l / r): ")
-    char_x, char_y = move(direction, char_x, char_y)
+    for obj in object:
+        direction = ""
 
-    enemy_direction = choice("udlr")
-    enemy_x, enemy_y = move(enemy_direction, enemy_x, enemy_y)
+        if obj["type"] == "hero":
+            direction = input("Enter direction (u / d / l / r): ")
+
+        elif obj["type"] == "enemy":
+            direction = choice("udlr")
+
+        move(direction, obj)
 
     step_count += 1
