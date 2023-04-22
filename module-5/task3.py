@@ -1,12 +1,26 @@
-# isupper(), islower(), lower(), upper()
+phone = "38050 111 22 11   "
+char_to_delete = ["(", "-", ")", "+", " "]
 
-str = "Ocean"
+for char in char_to_delete:
+    pass
+    # print(char in phone)
 
 
-def find_articles(key):
-    print(str.lower().find(key.lower()))
+def sanitize_phone_number(phone):
+    result = ""
+    strip = phone.strip()
+    for char in strip:
+        if char in char_to_delete:
+            continue
+        else:
+            result += char
+    return result
 
 
-find_articles("Ocean")
+print(sanitize_phone_number(phone))
 
-# print(str.casefold())
+#  "    +38(050)123-32-34",
+#     "     0503451234",
+#     "(050)8889900",
+#     "38050-111-22-22",
+#     "38050 111 22 11   ",

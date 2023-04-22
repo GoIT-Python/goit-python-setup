@@ -28,7 +28,7 @@ from re import search, findall, sub
 # regexp = r"H*"
 # regexp = r"rl+"
 # regexp = r"ll?"
-# regexp = r"s{2,5}"
+# regexp = r"s{2,}"
 # regexp = r"worl(ds)?"
 # regexp = r"world(s|e)"
 # regexp = r"world[se]"
@@ -42,10 +42,12 @@ from re import search, findall, sub
 # regexp = r"world[a-d]"
 # regexp = r"world[0-3]"
 # regexp = r"world[a-dA-D0-3s]"
-regexp = r"world[^a-dA-D0-3s]"
+# regexp = r"world[^a-dA-D0-3s]"
+# regexp = r"\B\d"
+regexp = r"\s"
 
-str = "Hello world2"
+str = "Hello worlds"
 
-result = search(regexp, str)
+result = findall(regexp, str)
 
 print(result)

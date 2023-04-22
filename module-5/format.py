@@ -4,4 +4,5 @@
 
 # print("{name} {last_name}".format(name="John", last_name="Smith"))
 
-print("int: {0:#d};  hex: {0:#x};  oct: {0:#o};  bin: {0:#b}".format(10))
+for i in range(15):
+    print("int: {0:#d}; hex: {0:#x}; bin: {0:#b}".format(i))
