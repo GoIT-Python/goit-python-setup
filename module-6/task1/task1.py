@@ -10,8 +10,7 @@ def total_salary(path):
             break
         for idx, ch in enumerate(line):
             if ch == ",":
-                res = float(line[(idx + 1) :])
-                result += res
+                result += float(line[(idx + 1) :])
     fh.close()
     return result
 

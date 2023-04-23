@@ -1,8 +1,11 @@
-text = "Alex Korp,3000"
+text = "steve:oppjM13LL9e\n"
+str = ""
 
-# print(text[10:])
 
-for idx, ch in enumerate(text):
-    if ch == ",":
-        res = text[(idx + 1) :]
-        print(res)
+for ch in text:
+    if not ch == "\n":
+        str += ch
+    else:
+        continue
+
+print(str)

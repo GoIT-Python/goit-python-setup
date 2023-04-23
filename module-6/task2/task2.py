@@ -1,7 +1,17 @@
-text = "Alex Korp,3000"
-text = "Nikita Borisenko,2000"
-text = "Sitarama Raju,1000"
+list = [["Robert Stivenson,28", "Alex Denver,30"], ["Drake Mikelsson,19"]]
+path = "task2.txt"
 
 
-def total_salary(path):
-    pass
+def write_employees_to_file(employee_list, path):
+    fh = open(path, "w")
+    for div in employee_list:
+        for item in div:
+            fh.write(item + "\n")
+    fh.close()
+
+
+write_employees_to_file(list, path)
+
+# Robert Stivenson,28
+# Alex Denver,30
+# Drake Mikelsson,19
