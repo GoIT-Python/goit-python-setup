@@ -97,7 +97,7 @@ def handle_output(output):
 
     print(f"Target Directory Items Dict: {output_dict}")
     print(
-        f"Target Directory Known Extentions List: {output_ext}",
+        f"Target Directory Known Extentions List: {set(output_ext)}",
     )
     print(f"Target Directory Alien Extentions List: {alien_ext}")
 
