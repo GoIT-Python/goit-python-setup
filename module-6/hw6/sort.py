@@ -3,29 +3,8 @@ import shutil
 import sys
 from pathlib import Path
 
-# os.rename("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
-# os.replace("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
-# shutil.move("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
-
-from parse import parse_folder
+from parse import parse
 from normalize import normalize
-
-# p = Path() / "module-04" / "path_lib.py"
-# p = Path() / "module-04"
-# print(p)
-# for i in p.iterdir():
-#     pass
-# print(i)
-# print(p.cwd())
-
-# print(p.home())
-# print(p.parent)
-# print(p.name)
-# print(p.suffix)
-# print(p.exists())
-# print(p.is_dir())
-# print(p.is_file())
-# print(p.absolute())
 
 ext = {
     "images": ["JPEG", "PNG", "JPG", "SVG"],
@@ -36,47 +15,112 @@ ext = {
     "other": [],
 }
 
-output = "./folder"
+output = "target"
 
 
-def rename(path):
-    list = parse_folder(path)
-    for file in list:
-        old_name = file.absolute()
-        new_name = Path(os.path.join(path, f"{normalize(file.stem)}{file.suffix}"))
-        os.rename(old_name, new_name)
+def rename(file, path):
+    if os.path.exists(file):
+        norm_name = normalize(file.stem) + file.suffix
+        new_name = os.path.join(path, norm_name)
+        os.rename(file, new_name)
+
+
+def make_dir(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
+def sort_known(sfx, path, file):
+    for key, value in ext.items():
+        directory = key
+        parent_dir = path.parent
+        dest = os.path.join(parent_dir, output, directory)
+
+        for item in value:
+            if sfx.casefold() == item.casefold():
+                make_dir(dest)
+                rename(file, dest)
+
+
+def sort_unknown(sfx, path, file):
+    for value in ext.values():
+        directory = "other"
+        parent_dir = path.parent
+        dest = os.path.join(parent_dir, output, directory)
+
+        for item in value:
+            if not sfx.casefold() == item.casefold():
+                make_dir(dest)
+                rename(file, dest)
+
+
+def handle_archives(path):
+    parent_dir = path.parent
+    norm_sfx = []
+    for sfx in ext["archives"]:
+        norm_sfx.append(sfx.casefold())
+    dest = os.path.join(parent_dir, output, "archives")
+    if os.path.exists(dest):
+        os.chdir(dest)
+    for item in Path(os.getcwd()).iterdir():
+        arch_dest = os.path.join(os.getcwd(), item.stem)
+        if item.is_file():
+            shutil.unpack_archive(item, arch_dest)
+    for root, _, f_names in os.walk(dest):
+        for f in f_names:
+            if Path(os.path.join(root, f)).suffix[1:] in norm_sfx:
+                os.remove(Path(os.path.join(root, f)))
+
+
+def handle_output(output):
+    ext_list = []
+    output_ext = []
+    alien_ext = []
+    for _, value in ext.items():
+        for item in value:
+            ext_list.append(item.casefold())
+
+    parent_dir = os.getcwd()
+    dest = Path(os.path.join(parent_dir, output))
+    output_dict = {}
+    for item in dest.iterdir():
+        output_dict.update({item.name: []})
+        output_list = []
+        for file in item.iterdir():
+            output_list.append(file.name)
+            if file.suffix[1:] in ext_list:
+                output_ext.append(file.suffix)
+            else:
+                if file.suffix:
+                    alien_ext.append(file.suffix)
+        output_dict.update({item.name: output_list})
+
+    print(f"Target Directory Items Dict: {output_dict}")
+    print(
+        f"Target Directory Known Extentions List: {output_ext}",
+    )
+    print(f"Target Directory Alien Extentions List: {alien_ext}")
 
 
 def sort(path):
-    rename(path)
-    # allfiles = os.listdir(path)
-    # print(allfiles)
-    list = parse_folder(path)
+    if os.path.exists(path):
+        dest = os.path.join(path.parent, output)
+        make_dir(dest)
+        for item in parse(path):
+            file = Path(item).absolute()
+            sfx = "".join(file.suffix[1:])
 
-    for file in list:
-        sfx = "".join(file.suffix[1:])
-        for key, value in ext.items():
-            directory = key
-            parent_dir = path.parent
-            dest = os.path.join(parent_dir, output, directory)
-            other = os.path.join(parent_dir, output, "other")
-            print(value)
-            # for item in value:
-            # if sfx.casefold() == item.casefold():
-            #     if not os.path.exists(dest):
-            #         os.makedirs(dest)
-            #     # if os.path.exists(file):
-            #     shutil.move(file, os.path.join(dest, file.name))
-            # else:
-            #     if not os.path.exists(other):
-            #         os.makedirs(other)
-            #     if os.path.exists(file):
-            #         shutil.move(file, os.path.join(other, file.name))
-            #     # os.rename(file, os.path.join(other, file.name))
+            sort_known(sfx, path, file)
+            sort_unknown(sfx, path, file)
 
-    if not parse_folder(path):
-        pass
-        # os.rmdir(path)
+        if not parse(path):
+            shutil.rmtree(path)
+        else:
+            sort(path)
+
+        handle_archives(path)
+
+        handle_output(dest)
 
 
 if __name__ == "__main__":

@@ -1,8 +1,9 @@
-def parse_folder(path):
-    list = []
-    for item in path.iterdir():
-        if item.is_dir():
-            parse_folder(item)
-        else:
-            list.append(item)
-    return list
+import os
+
+
+def parse(path):
+    fname = []
+    for root, _, f_names in os.walk(path):
+        for f in f_names:
+            fname.append(os.path.join(root, f))
+    return fname
