@@ -1,0 +1,2 @@
+[console_scripts]
+example = example_package_vokur13.example:hello
