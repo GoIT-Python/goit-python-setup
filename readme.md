@@ -32,5 +32,8 @@ Uploading the distribution archives:
 python3 -m pip install --upgrade twine
 python3 -m twine upload --repository testpypi dist/\*
 
+Python Packaging User Guide:
+https://packaging.python.org/en/latest/
+
 Setuptools Entry Points:
 https://setuptools.pypa.io/en/latest/userguide/entry_point.html
