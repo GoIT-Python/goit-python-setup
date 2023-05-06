@@ -1,8 +1,9 @@
 from random import randrange
 
-min=1
-max=49
-quantity=6
+min = 1
+max = 49
+quantity = 6
+
 
 def get_numbers_ticket(min, max, quantity):
     if not min > 0:
@@ -12,17 +13,18 @@ def get_numbers_ticket(min, max, quantity):
     elif not min < quantity < max:
         return []
 
-    numbers=[]
-    i=min
-    while i<=quantity:
-        number= randrange(min, max+1)
+    numbers = []
+    i = min
+    while i <= quantity:
+        number = randrange(min, max + 1)
         if not number in numbers:
             numbers.append(number)
-            i+=1
+            i += 1
         else:
             continue
-        res=sorted(numbers)
-        return res
+    res = sorted(numbers)
+    print(res)
+    return res
 
 
-get_numbers_ticket(min,max,quantity)
+get_numbers_ticket(min, max, quantity)

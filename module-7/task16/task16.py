@@ -1,14 +1,17 @@
 data = ["X", 3, "Z", 2, "X", 2, "Y", 3, "Z", 2]
 
 
+list = []
+
+
 def decode(data):
     if not (bool(data)):
         return data
-    list = []
-    for ch in data.pop(-1) * data.pop(-1):
+    for ch in data.pop(0) * data.pop(0):
         list.append(ch)
-        decode(data)
-    print(list)
+    decode(data)
+    return list
 
 
-decode(data)
+res = decode(data)
+print(res)
