@@ -11,14 +11,23 @@ participants = {
 
 
 def get_random_winners(quantity, participants):
+    if not quantity < len(participants):
+        return []
     list = []
     for key in participants.keys():
         list.append(key)
     random.shuffle(list)
-    if not quantity < len(participants):
-        return []
     print(random.sample(list, k=quantity))
     return random.sample(list, k=quantity)
 
 
 get_random_winners(quantity, participants)
+
+# def get_random_winners(quantity, participants):
+#     if  quantity > len(participants):
+#         return []
+#     list = []
+#     for key in participants.keys():
+#         list.append(key)
+#     random.shuffle(list)
+#     return random.sample(list, k=quantity)
