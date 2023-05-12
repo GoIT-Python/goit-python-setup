@@ -1,3 +1,3 @@
-cache = {1: "a", 1: "b", 3: "c", 4: "d", 5: "e"}
+func = lambda a, b: a + b
 
-print("b" in cache)
+print(func(1, 1))
