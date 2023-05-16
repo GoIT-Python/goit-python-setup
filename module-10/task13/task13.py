@@ -16,12 +16,10 @@ class Cat(Animal):
 
 
 class CatDog:
-    def __init__(self, voice) -> None:
-        self.voice = voice
-
     def say(self):
-        return self.voice
+        pass
 
 
-catdog = CatDog("Meow")
-print(catdog.say())
+animal_1 = Animal('Baltasar', 7)
+
+print(animal_1.say())

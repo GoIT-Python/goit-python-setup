@@ -1,7 +1,3 @@
-# SOLID:
-
-# Single responsibility (SRP)
-
 import random
 
 
@@ -39,16 +35,34 @@ class Character:
 
 class Weapon:
     def __init__(self):
-        self.type = 'sword'
         self.damage = 10
 
+    def kick(self):
+        return self.damage
 
-char_1 = Character('char_1')
-char_2 = Character('char_2')
-sword = Weapon()
-print(sword.type)
+
+class Knife(Weapon):
+    def __init__(self):
+        self.damage = 5
+
+    def throw(self):
+        return self.damage - 2
+
+
+class Sword(Weapon):
+    def __init__(self):
+        self.damage = 15
+
+
+class Axe(Weapon):
+    def __init__(self):
+        self.damage = 20
+
+
+knife = Knife()
+print(knife.damage)
+print(knife.kick())
+print(knife.throw())
+sword = Sword()
 print(sword.damage)
-char_1.pick_weapon(sword)
-print(char_1.left_hand)
-char_1.die()
-print(char_1.right_hand)
+print(sword.kick())
