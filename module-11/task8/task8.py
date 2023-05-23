@@ -9,8 +9,11 @@ class Position:
         return self.x, self.y
 
     def __sub__(self, other):
+        other.x = other.x - self.x
+        other.y = other.y - self.y
         self.x -= other.x
         self.y -= other.y
+        # return self.x - other.x, self.y - other.y
         return self.x, self.y
 
 

@@ -50,14 +50,16 @@ class Vector:
         return self.coordinates.x, self.coordinates.y
 
     def __add__(self, vector):
-        self.coordinates.x += vector[0]
-        self.coordinates.y += vector[1]
+        self[0] += vector[0]
+        self[1] += vector[1]
         return self
 
     def __sub__(self, vector):
-        vector.coordinates.x = vector.coordinates.x - self.coordinates.x
-        vector.coordinates.y = vector.coordinates.y - self.coordinates.y
-        return vector
+        vector[0] = vector[0] - self[0]
+        vector[1] = vector[1] - self[1]
+        self[0] -= vector[0]
+        self[1] -= vector[1]
+        return self
 
     def __str__(self):
         return f"Vector({self.coordinates.x},{self.coordinates.y})"
