@@ -3,18 +3,14 @@ data = ["X", 3, "Z", 2, "X", 2, "Y", 3, "Z", 2]
 
 def decode(data):
     if not (bool(data)):
-        return []
+        return data
     else:
-        return decode(data[0])
+
+        res = ([data.pop(0) * data.pop(0) for i in data])
+        print('res', res)
+        res.append(decode(data[-2:]))
 
 
-print(decode(data))
-
-
-# def factorial(n):
-#     if n <= 1:
-#         return 1
-#     else:
-#         return n * factorial(n - 1)
-
-# factorial(5)    # 120
+decode(data)
+# fin = decode(data)
+# print(fin)
