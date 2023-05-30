@@ -18,8 +18,7 @@ class Contacts:
 
     def save_to_file(self):
         with open(self.filename, 'wb') as fh:
-            for item in self.contacts:
-                pickle.dump(item, fh)
+            pickle.dump(self.contacts, fh)
 
     def read_from_file(self):
         with open(self.filename, 'rb') as fh:
@@ -27,7 +26,7 @@ class Contacts:
             return unpacked
 
 
-contacts = [
+list_ = [
     Person(
         "Allen Raymond",
         "nulla.ante@vestibul.co.uk",
@@ -42,7 +41,7 @@ contacts = [
     ),
 ]
 
-persons = Contacts("user_class.dat", contacts)
+persons = Contacts("user_class.dat", list_)
 print(persons)
 # persons.save_to_file()
 # person_from_file = persons.read_from_file()
