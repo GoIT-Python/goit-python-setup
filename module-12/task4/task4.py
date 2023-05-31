@@ -18,7 +18,8 @@ class Contacts:
 
     def save_to_file(self):
         with open(self.filename, 'wb') as fh:
-            pickle.dump(self.contacts, fh)
+            for contact in self.contacts:
+                pickle.dump(contact, fh)
 
     def read_from_file(self):
         with open(self.filename, 'rb') as fh:
@@ -42,8 +43,7 @@ list_ = [
 ]
 
 persons = Contacts("user_class.dat", list_)
-print(persons)
-# persons.save_to_file()
+persons.save_to_file()
 # person_from_file = persons.read_from_file()
 # print(person_from_file)
 # print(persons == person_from_file)  # False
